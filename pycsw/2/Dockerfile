@@ -37,10 +37,12 @@ RUN chmod a+x /usr/bin/launch-pycsw \
   && adduser -D -u 1000 user user \
   && mkdir -p /pycsw \
   && chown -R 1000:1000 /pycsw \
-  && pip install pysu
+  && pip install \
+    gunicorn \
+    pysu
 
 EXPOSE 8000
 
 ENTRYPOINT ["launch-pycsw"]
 
-CMD ["run"]
+CMD ["run", "pycsw.wsgi", "--workers=2", "--bind=0.0.0.0:8000", "--access-logfile=-"]

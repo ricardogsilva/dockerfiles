@@ -14,7 +14,7 @@ from pysu import cli
 
 
 def prepare_pycsw_server_command(*args):
-    return ["python", "-m", "pycsw.wsgi"]
+    return ["gunicorn"]
 
 
 def prepare_pycsw_admin_command(*args):
@@ -42,7 +42,9 @@ def _get_parser(description=__doc__):
     parser_admin.set_defaults(func=prepare_pycsw_admin_command)
     parser_run = subparsers.add_parser(
         "run",
-        help="Run the pycsw `pycsw.wsgi` module."
+        help="Run pycsw using gunicorn. Any extra arguments are passed "
+             "directly to gunicorn. Example: 'launch_pycsw user run "
+             "--bind 0.0.0.0:8000 --workers 2"
     )
     parser_run.set_defaults(func=prepare_pycsw_server_command)
     return parser
